@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Madara's Rinnegan - Friendship Day</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    .eyes {
+      display: flex;
+      gap: 8vw;
+      opacity: 0;
+      transform: scale(0.5);
+      animation: openEyes 1.2s ease-out forwards;
+      margin-bottom: 60px;
+    }
+
+    @keyframes openEyes {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .eye {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      filter: drop-shadow(0 0 15px #880088);
+    }
+
+    .eye svg {
+      width: 100%;
+      height: 100%;
+      animation: spin 10s linear infinite;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(-360deg); }
+    }
+
+    .eye svg circle.ring {
+      animation: pulseRing 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseRing {
+      0%, 100% { stroke-width: 2; opacity: 0.6; }
+      50% { stroke-width: 4; opacity: 1; }
+    }
+
+    .eyelid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 40%, #000 100%);
+      transform: translateY(-100%);
+      animation: blink 5s infinite ease-in-out;
+      z-index: 3;
+    }
+
+    @keyframes blink {
+      0%, 96%, 100% { transform: translateY(-100%); }
+      97%, 98% { transform: translateY(0); }
+    }
+
+    .pupil {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #000;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      transition: transform 0.1s linear;
+    }
+
+    .message {
+      text-align: center;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: mistyFadeIn 3s ease-out 1s forwards, mistFall 4s ease-out 3.5s infinite;
+      text-shadow: 0 0 10px #fff, 0 0 20px #aaa, 0 0 30px #ccc;
+    }
+
+    @keyframes mistyFadeIn {
+      0% { opacity: 0; filter: blur(8px); transform: scale(0.8); }
+      50% { opacity: 0.7; filter: blur(4px); }
+      100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+    }
+
+    @keyframes mistFall {
+      0% { text-shadow: 0 0 10px #fff, 0 0 20px #aaa, 0 0 30px #ccc; }
+      50% { text-shadow: 0 5px 15px #aaa, 0 10px 25px #888; }
+      100% { text-shadow: 0 0 10px #fff, 0 0 20px #aaa, 0 0 30px #ccc; }
+    }
+  </style>
+</head>
+<body>
+  <audio id="activationSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_5e2a3f5011.mp3?filename=anime-swish-transition-112195.mp3" preload="auto"></audio>
+
+  <div class="eyes">
+    <div class="eye">
+      <div class="pupil"></div>
+      <div class="eyelid"></div>
+      <svg viewBox="0 0 100 100">
+        <circle class="ring" cx="50" cy="50" r="45" fill="#6a00ff" />
+        <circle class="ring" cx="50" cy="50" r="35" fill="none" stroke="#2c0042" />
+        <circle class="ring" cx="50" cy="50" r="25" fill="none" stroke="#2c0042" />
+        <circle cx="50" cy="15" r="3" fill="#000" />
+        <circle cx="72" cy="65" r="3" fill="#000" />
+        <circle cx="28" cy="65" r="3" fill="#000" />
+      </svg>
+    </div>
+
+    <div class="eye">
+      <div class="pupil"></div>
+      <div class="eyelid"></div>
+      <svg viewBox="0 0 100 100">
+        <circle class="ring" cx="50" cy="50" r="45" fill="#6a00ff" />
+        <circle class="ring" cx="50" cy="50" r="35" fill="none" stroke="#2c0042" />
+        <circle class="ring" cx="50" cy="50" r="25" fill="none" stroke="#2c0042" />
+        <circle cx="50" cy="15" r="3" fill="#000" />
+        <circle cx="72" cy="65" r="3" fill="#000" />
+        <circle cx="28" cy="65" r="3" fill="#000" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="message">Happy Friendship Day</div>
+
+  <script>
+    const sound = document.getElementById("activationSound");
+    const messageEl = document.querySelector(".message");
+
+    // Play swish sound
+    window.addEventListener("load", () => {
+      sound.play().catch(() => {
+        document.body.addEventListener("click", () => sound.play(), { once: true });
+      });
+    });
+
+    // Move pupils
+    function movePupils(x, y) {
+      document.querySelectorAll('.eye').forEach(eye => {
+        const rect = eye.getBoundingClientRect();
+        const dx = x - (rect.left + rect.width / 2);
+        const dy = y - (rect.top + rect.height / 2);
+        const dist = Math.min(10, Math.hypot(dx, dy) / 10);
+        const angle = Math.atan2(dy, dx);
+        const offsetX = Math.cos(angle) * dist;
+        const offsetY = Math.sin(angle) * dist;
+        eye.querySelector('.pupil').style.transform = `translate(calc(-50% + ${offsetX}px), calc(-50% + ${offsetY}px))`;
+      });
+    }
+
+    document.addEventListener('mousemove', e => movePupils(e.clientX, e.clientY));
+    document.addEventListener('touchmove', e => {
+      if (e.touches[0]) movePupils(e.touches[0].clientX, e.touches[0].clientY);
+    });
+
+    // Speak Japanese with a pleasant male voice
+    function speakJapanese() {
+      const msg = new SpeechSynthesisUtterance("ハッピーフレンドシップデー");
+      msg.lang = "ja-JP";
+      msg.rate = 1.1;  // slightly fast
+      msg.pitch = 0.7; // warm & deeper
+      msg.volume = 1;
+
+      const voices = speechSynthesis.getVoices();
+      const maleVoice = voices.find(v =>
+        v.lang === "ja-JP" &&
+        /ichiro|takumi|osamu|male/i.test(v.name)
+      );
+      if (maleVoice) {
+        msg.voice = maleVoice;
+      } else {
+        const fallback = voices.find(v => v.lang === "ja-JP");
+        if (fallback) msg.voice = fallback;
+      }
+
+      speechSynthesis.speak(msg);
+    }
+
+    // Speak a bit before message fully fades in
+    function triggerSpeech() {
+      if (speechSynthesis.getVoices().length > 0) {
+        speakJapanese();
+      } else {
+        speechSynthesis.onvoiceschanged = () => {
+          speakJapanese();
+        };
+      }
+    }
+
+    // Delay speech slightly so it syncs with text mist appearance
+    setTimeout(triggerSpeech, 1300); // aligns with 1s delay in fade + early start
+
+  </script>
+</body>
+</html>
+
